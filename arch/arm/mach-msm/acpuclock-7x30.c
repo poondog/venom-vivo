@@ -118,7 +118,7 @@ static struct clk *acpuclk_sources[MAX_SOURCE];
 static struct clkctl_acpu_speed acpu_freq_tbl[] = {
 	{ 0, 24576,  LPXO, 0, 0,  30720000,  1000, VDD_RAW(1000) },
 	{ 0, 61440,  PLL_3,    5, 11, 61440000,  1000, VDD_RAW(1000) },
-	{ 0, 122880, PLL_3,    5, 5,  61440000,  1000, VDD_RAW(1000) },
+	{ 1, 122880, PLL_3,    5, 5,  61440000,  1000, VDD_RAW(1000) },
 	{ 0, 184320, PLL_3,    5, 4,  61440000,  1000, VDD_RAW(1000) },
 	{ 0, MAX_AXI_KHZ, AXI, 1, 0, 61440000, 1000, VDD_RAW(1000) },
 	{ 1, 245760, PLL_3,    5, 2,  61440000,  1000, VDD_RAW(1000) },
@@ -132,7 +132,7 @@ static struct clkctl_acpu_speed acpu_freq_tbl[] = {
 	{ 1, 1024000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[1]},
 	{ 1, 1200000, PLL_2, 3, 0, UINT_MAX, 1200, VDD_RAW(1200), &pll2_tbl[2]},
 	{ 1, 1401600, PLL_2, 3, 0, UINT_MAX, 1250, VDD_RAW(1250), &pll2_tbl[3]},
-	{ 1, 1497600, PLL_2, 3, 0, UINT_MAX, 1250, VDD_RAW(1250), &pll2_tbl[4]},
+	{ 0, 1497600, PLL_2, 3, 0, UINT_MAX, 1250, VDD_RAW(1250), &pll2_tbl[4]},
 	{ 0 }
 };
 
@@ -157,6 +157,9 @@ static int acpuclk_set_acpu_vdd(struct clkctl_acpu_speed *s)
 				__func__, s->vdd_mv, ret);
 	else /* Wait for voltage to stabilize. */
 		udelay(62);
+
+	if (!ret)
+		return 0;
 
 	return ret;
 }
